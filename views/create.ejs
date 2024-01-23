@@ -1,0 +1,19 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=title%></title>
+</head>
+<body>
+    <h1>Create your book</h1>
+    <div class="form">
+        <form action="/books" method="POST">
+            <input type="text" placeholder="Book name" name="title"><br>
+        <input type="text" placeholder="Author name" name="author"><br>
+        <input type="text" placeholder="Description" name="description"><br>
+        <input type="submit" value="Add">
+        </form>
+        
+    </div>
+</body>
+</html>
