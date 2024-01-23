@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <div class="content">
+        
+        <% if(book.length>0) { %>
+            <% book.forEach(books =>{ %>
+                    <h1><%= books.title %></h1>
+                    <h4><%=books.author %></h4>
+                    <p><%=books.description %></p>
+                <% }) %>
+        <% } else { %>
+            <p>No books available.</p>
+        <% } %>
+    </div>
+</body>
+</html>
