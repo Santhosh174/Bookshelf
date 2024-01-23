@@ -1,0 +1,31 @@
+.card{
+    margin-top: 200px;
+}
+.header a{
+    margin-left: 40px;
+    
+}
+.header a:hover{
+    color: rgb(252, 50, 0);
+    
+}
+.her h1{
+    font-size: 40px;
+    margin-top: 50px;
+   
+}
+.her p{
+    font-weight: 400;
+    margin-top: 30px;
+    margin-bottom: 200px;
+}
+.image img{
+    width: 80vh;
+    float: right;
+    margin-top: -350px;
+    
+ 
+}
+.her{
+    margin: 100px ;
+}
