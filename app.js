@@ -8,7 +8,6 @@ app.listen(port,()=>{
 });
 
 const Book_db = require('./db/books');
-//const routes = require('./routes/blogRoutes')
 const db = 'mongodb+srv://santhosh_18:santhosh1818@santhosh.q56f2et.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
     .then((result)=> console.log('connected to db'))
@@ -43,5 +42,28 @@ app.post("/books",(req,res)=>{
             console.log(err);
         })
 })
+
+app.get('/books/:id',(req,res)=>{
+    const ids = req.params.id
+    Book_db.findById(ids)
+        .then((result)=>{
+            res.render('details',{book:result,title:'Book details'})
+        })
+        .catch((err)=>{
+            res.status(404).render('404',{title:'error'});
+        })
+})
+
+app.delete('/books/:id',(req,res)=>{
+    const id = req.params.id;
+    Book_db.findByIdAndDelete(id)
+        .then((result)=>{
+            res.json({redirect:'/books'});
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+});
+
 
 app.use(morgan('dev'));
