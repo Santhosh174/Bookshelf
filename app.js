@@ -67,17 +67,22 @@ app.delete('/books/:id',(req,res)=>{
 
 
 app.get('/search', (req, res) => {
-    const searchTitle = req.query.title;
-    const heading = searchTitle
-    if (!searchTitle) {
+    const searchQuery = req.query.title;
+    const heading = searchQuery
+    if (!searchQuery) {
       return res.redirect('/');
     }
   
-    const searchRegex = new RegExp(searchTitle, 'i');
+    const searchRegex = new RegExp(searchQuery, 'i');
   
-    Book_db.find({ title: searchRegex }).sort({ createdAt: -1 })
+    Book_db.find({
+        $or: [
+            { title: searchRegex },
+            { author: searchRegex } 
+        ]
+    }).sort({ createdAt: -1 })
       .then((result) => {
-        res.render('index', { title: "Search Results",header:`Books related to name "${heading}"`, book: result });
+        res.render('index', { title: "Search Results",header:`Books related to  "${heading}"`, book: result });
       })
       .catch((err) => {
         console.log(err);

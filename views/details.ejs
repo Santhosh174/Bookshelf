@@ -1,78 +1,90 @@
-<html lang="en">
+<% function formatDate(dateString) { const options={ year: 'numeric' , month: 'numeric' , day: 'numeric' }; const
+    formattedDate=new Date(dateString).toLocaleDateString(undefined, options); return formattedDate; } %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%=title%></title>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/details.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-</head>
+    <html lang="en">
 
-<body>
-    <div class="header">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">BookShelf</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link " aria-current="page" href="/books">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/create">Create</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link active " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Details
-                            </a>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            <%=title%>
+        </title>
+        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/details.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    </head>
 
-                        </li>
+    <body>
+        <div class="header">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">BookShelf</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link " aria-current="page" href="/books">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/create">Create</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link active " href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Details
+                                </a>
 
-                    </ul>
+                            </li>
+
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </div>
-    
-    <h1 class="title"><%-book.title %></h1>
-    <div class="detailss">
-        <p class="author"><span>Author name : </span><%-book.author %></p>
-        <p class="description"><span>Descritpion : </span><%-book.description %></p>
-        <button class="edit" data-doc="<%- book._id %>">Edit</button>
-        <button class="del" data-doc="<%- book._id %>">Delete</button>
+            </nav>
+        </div>
 
-    </div>
+        <h1 class="title"><%-book.title %></h1>
+        <div class="detailss">
+            <p class="author"><span>Author name : </span><%-book.author %></p>
+            <p class="genre"><span>Genre : </span><%-book.genre %></p>
+            <p class="published"><span>Published Date : </span><span class="formatted-date" style="color: black;font-weight: 400;"><%-
+                        formatDate(book.published) %></span></p>
+            <p class="description"><span>Descritpion : </span><%-book.description %></p>
+            <button class="edit" data-doc="<%- book._id %>">Edit</button>
+            <button class="del" data-doc="<%- book._id %>">Delete</button>
+
+        </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
         <script>
 
-const editButton = document.querySelector('button.edit');
-    editButton.addEventListener('click', (e) => {
-        const bookId = (editButton.dataset.doc).trim();
-        window.location.href = '/books/edit/' + bookId;
-    });
 
-             const trash1 = document.querySelector('button.del');
-             trash1.addEventListener('click',(e)=>{
-        const endpoint = '/books/'+(trash1.dataset.doc).trim();
-        fetch(endpoint,{
-            method: 'DELETE'  
-        })
-        .then((response)=>response.json())
-        .then((data)=>window.location.href = data.redirect)
-        .catch(err=> console.log(err));
-    })
+            const editButton = document.querySelector('button.edit');
+            editButton.addEventListener('click', (e) => {
+                const bookId = (editButton.dataset.doc).trim();
+                window.location.href = '/books/edit/' + bookId;
+            });
+
+            const trash1 = document.querySelector('button.del');
+            trash1.addEventListener('click', (e) => {
+                const endpoint = '/books/' + (trash1.dataset.doc).trim();
+                fetch(endpoint, {
+                    method: 'DELETE'
+                })
+                    .then((response) => response.json())
+                    .then((data) => window.location.href = data.redirect)
+                    .catch(err => console.log(err));
+            })
+
+
         </script>
-</body>
+    </body>
 
-</html>
+    </html>

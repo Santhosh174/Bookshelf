@@ -13,6 +13,14 @@ const bookschema = new schema({
     description:{
         type : String,
         required:true
+    },
+    genre:{
+        type:String,
+        required:true
+    },
+    published:{
+        type:Date,
+        required:true
     }
 },{timestamps:true});
 

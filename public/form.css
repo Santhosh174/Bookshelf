@@ -38,12 +38,26 @@ label {
 
 #title,
 #author,
-#description {
+#description,
+#genre,
+#published ,
+#publishedDate {
     width: 33vw;
 }
-
+#resetBtn{
+    margin-left: 6vw;
+    background-color: rgb(99, 99, 99);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    width: 120px;
+    border: none;
+}
+#resetBtn:hover{
+    background-color: rgb(146, 146, 146);
+}
 #sub {
-    margin-left: 13vw;
+    margin-left: 2vw;
     width: 120px;
     color: white;
     background-color: black;
@@ -52,6 +66,16 @@ label {
     border-radius: 8px;
     margin-bottom: 5vh;
 }
-#sub:hover{
+#sub:hover,#subb:hover{
     background-color: rgb(29, 29, 29);
+}
+#subb{
+    margin-left: 13vw;
+    width: 120px;
+    color: white;
+    background-color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 5vh;
 }
