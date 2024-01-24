@@ -23,31 +23,29 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/books">Home</a>
+                            <a class="nav-link " aria-current="page" href="/books">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/create">Create</a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link active " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Details
                             </a>
 
                         </li>
 
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
                 </div>
             </div>
         </nav>
     </div>
+    
     <h1 class="title"><%-book.title %></h1>
     <div class="detailss">
         <p class="author"><span>Author name : </span><%-book.author %></p>
         <p class="description"><span>Descritpion : </span><%-book.description %></p>
+        <button class="edit" data-doc="<%- book._id %>">Edit</button>
         <button class="del" data-doc="<%- book._id %>">Delete</button>
 
     </div>
@@ -57,6 +55,13 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
         <script>
+
+const editButton = document.querySelector('button.edit');
+    editButton.addEventListener('click', (e) => {
+        const bookId = (editButton.dataset.doc).trim();
+        window.location.href = '/books/edit/' + bookId;
+    });
+
              const trash1 = document.querySelector('button.del');
              trash1.addEventListener('click',(e)=>{
         const endpoint = '/books/'+(trash1.dataset.doc).trim();

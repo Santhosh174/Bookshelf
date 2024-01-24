@@ -21,7 +21,7 @@ app.get('/',(req,res)=>{
     Book_db.find().sort({createdAt:-1})
     .then((result)=>{
         console.log(result)
-        res.render('index',{title:"All books",book:result});
+        res.render('index',{title:"All books",header:"All Books",book:result});
     })
     
 })
@@ -66,4 +66,46 @@ app.delete('/books/:id',(req,res)=>{
 });
 
 
+app.get('/search', (req, res) => {
+    const searchTitle = req.query.title;
+    const heading = searchTitle
+    if (!searchTitle) {
+      return res.redirect('/');
+    }
+  
+    const searchRegex = new RegExp(searchTitle, 'i');
+  
+    Book_db.find({ title: searchRegex }).sort({ createdAt: -1 })
+      .then((result) => {
+        res.render('index', { title: "Search Results",header:`Books related to name "${heading}"`, book: result });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).render('error', { title: 'Internal Server Error' });
+      });
+  });
+
+
+  app.get('/books/edit/:id', (req, res) => {
+    const id = req.params.id;
+    Book_db.findById(id)
+        .then((result) => {
+            res.render('edit', { book: result, title: 'Edit Book' });
+        })
+        .catch((err) => {
+            res.status(404).render('404', { title: 'error' });
+        });
+});
+
+app.post('/books/edit/:id', (req, res) => {
+    const id = req.params.id;
+    Book_db.findByIdAndUpdate(id, req.body, { new: true })
+        .then((result) => {
+            res.redirect('/books/' + result._id);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(404).render('404', { title: 'error' });
+        });
+});
 app.use(morgan('dev'));

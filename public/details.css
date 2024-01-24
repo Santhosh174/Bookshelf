@@ -15,10 +15,28 @@ p{
     font-size: 25px;
 }
 .del{
-    background-color: red;
+    background-color: rgb(255, 0, 0);
     color: rgb(255, 255, 255);
     margin-top: 4vh;
     padding: 10px;
     border-radius: 8px;
     border:none;
+}
+.del:hover{
+    background-color: rgb(204, 0, 0);
+}
+.description{
+    margin-right: 5vw;
+}
+.edit{
+    border: none;
+    cursor: pointer;
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    width: 5vw;
+}
+.edit:hover{
+    background-color: rgb(0, 167, 0);
 }

@@ -1,56 +1,57 @@
-.header a{
+.header a {
     margin-left: 40px;
-    
+
 }
-.header a:hover{
+
+.header a:hover {
     color: rgb(252, 50, 0);
-    
+
 }
-.formie{
-    text-align: center;
-    
+
+.formie {
     border: double;
-    background-color: rgba(129, 234, 248, 0.164);
-   margin-top: 50px;
-   margin-bottom: 100px;
-   margin-left: 400px;
-   margin-right: 400px;
-   width: 700px;
-   height: 65vh;
-   backdrop-filter: blur(10px);
-   border: 2px solid rgba(255,255,255,0.1);
-box-shadow: 0 0 40px rgba(8,7,16,0.6);
-border-radius: 10px;
+    background-color: rgba(22, 207, 231, 0.329);
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    margin-left: 27vw;
+    width: 47vw;
+    height: auto;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+    border-radius: 10px;
+}
 
+.formie h1 {
+    margin-top: 2vh;
+    text-align: center;
+}
 
+.inpu {
+    margin-left: 7vw;
+    margin-top: 5vh;
 }
-.formie input{
-    margin-top: 40px;
-    width: 250px;
-    
-   
 
+label {
+    font-weight: bold;
 }
-.formie select{
-    margin-top: 40px;
-    width: 150px;
-    display: inline-block;
-    margin-right: 100px;
+
+#title,
+#author,
+#description {
+    width: 33vw;
 }
-.formie label{
-    width: 100px;
-    display: inline-block;
-    font-weight: 800;
-    color: black;
-}
-.des{
-    height: 100px;
-   
-}
-#sub{
+
+#sub {
+    margin-left: 13vw;
+    width: 120px;
     color: white;
     background-color: black;
     border: none;
     padding: 10px;
     border-radius: 8px;
+    margin-bottom: 5vh;
+}
+#sub:hover{
+    background-color: rgb(29, 29, 29);
 }
