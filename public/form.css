@@ -1,12 +1,4 @@
-.header a {
-    margin-left: 40px;
 
-}
-
-.header a:hover {
-    color: rgb(252, 50, 0);
-
-}
 
 .formie {
     border: double;
@@ -41,7 +33,8 @@ label {
 #description,
 #genre,
 #published ,
-#publishedDate {
+#publishedDate,
+#pdf {
     width: 33vw;
 }
 #resetBtn{

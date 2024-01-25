@@ -10,16 +10,16 @@
 </head>
 <body>
     <div class="header">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-primary py-3">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">BookShelf</a>
+          <a class="navbar-brand text-white" href="#">BookShelf</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/books">Home</a>
+                <a class="nav-link active text-decoration-underline text-light" aria-current="page" href="/books">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/create">Create</a>
@@ -28,15 +28,15 @@
             </ul>
             <form class="d-flex" role="search"  action="/search" method="GET">
               <input class="form-control me-2" type="search" placeholder="Search using book name or author name" aria-label="Search" name="title">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+              <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
           </div>
         </div>
       </nav>
     </div>
     <div class="her">
-        <h1>UPLOAD YOUR BOOKS</h1>
-        <p>read your favourite books anywhere,anytime.</p>
+        <h1>Explore Limitless Worlds of Imagination with Our Bookshelf</h1>
+        <p style="margin-bottom:10vh;">Discover a curated collection of captivating stories and literary treasures that transport you to new realms of excitement and knowledge at our Bookshelf. Your next adventure awaits between the pages.</p>
         <div class="image">
             <img src="/23167.jpg" alt="">
         </div>
@@ -46,6 +46,23 @@
         <div class="row">
             <div class="col-6">
                 <h3 class="mb-1"><%=header%></h3>
+                <form class="filterform" action="/genre" method="GET">
+                <select class="form-select" style="width: 50%;" aria-label="Default select example" name="genre" id="selete">
+                  <option value="All"<%= show === 'All' ? 'selected' : '' %>>All</option>
+                  <option value="Mystery" <%= show === 'Mystery' ? 'selected' : '' %>>Mystery</option>
+                  <option value="Science Fiction" <%= show === 'Science Fiction' ? 'selected' : '' %>>Science Fiction</option>
+                  <option value="Love" <%= show === 'Love' ? 'selected' : '' %>>Love</option>
+                  <option value="Fantasy" <%= show === 'Fantasy' ? 'selected' : '' %>>Fantasy</option>
+                  <option value="Thriller" <%= show === 'Thriller' ? 'selected' : '' %>>Thriller</option>
+                  <option value="Historical" <%= show === 'Historical' ? 'selected' : '' %>>Historical</option>
+                  <option value="Biography" <%= show === 'Biography' ? 'selected' : '' %>>Biography</option>
+                  <option value="Non-fiction" <%= show === 'Non-fiction' ? 'selected' : '' %>>Non-fiction</option>
+                  <option value="Horror" <%= show === 'Horror' ? 'selected' : '' %>>Horror</option>
+                  <option value="Adventure" <%= show === 'Adventure' ? 'selected' : '' %>>Adventure</option>
+                  <option value="Action" <%= show === 'Action' ? 'selected' : '' %>>Action</option>
+                </select>
+                <input type="submit" value="Filter">
+              </form>
             </div>
             <div class="col-6 text-right">
                 <a class="btn btn-primary mb-3 mr-1" href="#carouselExampleIndicators2" role="button" data-slide="prev">
@@ -68,8 +85,9 @@
                                     <a class="card mt-5"  href="/books/<%=books._id %>" style="text-decoration: none;" id="carda">
                                        
                                         <div class="card-body">
-                                            <h4 class="card-title"><%= books.title %></h4>
-                                            <p class="card-text"><%=books.description.slice(0,120) %>....</p>
+                                            <h2 class="card-title  text-primary"><%= books.title %></h2>
+                                            <h6 class="card-text text-success">Author name : <%=books.author %></h6>
+                                            <p class="card-text">Genre : <%=books.genre %></p>
 
                                         </div>
 

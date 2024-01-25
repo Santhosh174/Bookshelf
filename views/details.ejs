@@ -17,9 +17,9 @@
 
     <body>
         <div class="header">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <nav class="navbar navbar-expand-lg bg-primary py-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">BookShelf</a>
+                    <a class="navbar-brand text-light" href="#">BookShelf</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
                                 <a class="nav-link" href="/create">Create</a>
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active " href="#" role="button" data-bs-toggle="dropdown"
+                                <a class="nav-link active text-light text-decoration-underline " href="#" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
                                     Details
                                 </a>
@@ -54,6 +54,7 @@
             <p class="published"><span>Published Date : </span><span class="formatted-date" style="color: black;font-weight: 400;"><%-
                         formatDate(book.published) %></span></p>
             <p class="description"><span>Descritpion : </span><%-book.description %></p>
+            <p class="pdf"><span>PDF : </span><a href="/books/pdf/<%- book._id %>" target="_blank">View Book PDF</a></p>
             <button class="edit" data-doc="<%- book._id %>">Edit</button>
             <button class="del" data-doc="<%- book._id %>">Delete</button>
 

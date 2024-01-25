@@ -21,8 +21,14 @@ const bookschema = new schema({
     published:{
         type:Date,
         required:true
+    },
+    pdf: {
+        data: Buffer, 
+        contentType: String
     }
 },{timestamps:true});
 
 const books = mongoose.model('book',bookschema);
 module.exports = books;
+
+
