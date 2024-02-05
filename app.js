@@ -3,6 +3,7 @@ const { result } = require('lodash');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
+const bcrypt = require('bcrypt');
 const fs = require('fs');
 const app = express();
 const port = 8000;
@@ -11,6 +12,7 @@ app.listen(port,()=>{
 });
 
 const Book_db = require('./db/books');
+const login = require('./db/user');
 const db = 'mongodb+srv://santhosh_18:santhosh1818@santhosh.q56f2et.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
     .then((result)=> console.log('connected to db'))
@@ -20,6 +22,9 @@ app.set('view engine','ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({extended:true}));
 
+
+app.use(express.json())
+app.use(express.urlencoded({extended:false}))
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -41,8 +46,41 @@ const upload = multer({
     }
 });
 
-
 app.get('/',(req,res)=>{
+    res.render('signin')
+})
+
+app.get('/signup',(req,res)=>{
+    res.render('signup')
+})
+
+app.post('/signup',async(req,res)=>{
+    const data = {
+        username:req.body.name,
+        password:req.body.password
+    }
+    console.log("Received data:", data);
+    try {
+        // Check if the username already exists
+        const existingUser = await login.findOne({ name: data.name });
+
+        if (existingUser) {
+            // Username already exists, handle accordingly (e.g., send an error message)
+            return res.send("Username is already taken. Please choose a different username.");
+        }
+
+        // Username is unique, proceed with user creation
+        const userData = await login.create(data);
+        console.log(userData);
+        res.send("User successfully registered!");
+    } catch (error) {
+        // Handle other errors (e.g., database connection issues)
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+})
+
+app.get('/allbooks',(req,res)=>{
     Book_db.find().sort({createdAt:-1})
     .then((result)=>{
         console.log(result)
@@ -55,7 +93,7 @@ app.get('/create',(req,res)=>{
     res.render('create',{title:'Add a Book'})
 })
 app.get('/books',(req,res)=>{
-    res.redirect('/')
+    res.redirect('/allbooks')
 })
 app.post("/books",upload.single('pdf'), async(req,res)=>{
     console.log(req)
