@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const { result } = require('lodash');
 const mongoose = require('mongoose');
 const multer = require('multer');
@@ -45,45 +46,62 @@ const upload = multer({
         }
     }
 });
+app.use(session({
+    secret: 'santy',
+    resave: false,
+    saveUninitialized: false
+}));
+const isAuthenticated = (req, res, next) => {
+    if (req.session.loggedIn) { 
+        next();
+    } else {
+        res.redirect('/'); 
+    }
+};
 
 app.get('/',(req,res)=>{
-    res.render('signin')
+    res.render('signin',{message:""})
 })
 
 app.get('/signup',(req,res)=>{
-    res.render('signup')
+    res.render('signup',{message:""})
 })
 
 app.post('/signup',async(req,res)=>{
     const data = {
-        username:req.body.name,
-        password:req.body.password
+        username : req.body.username,
+        password : req.body.password
     }
-    console.log("Received data:", data);
-    try {
-        // Check if the username already exists
-        const existingUser = await login.findOne({ name: data.name });
+    const existingUser = await login.findOne({username:data.username})
+    if(existingUser){
+        res.render('signup', { message: 'User already exists. Please choose a different username.' });
+    }
+    else{
+    const saltrounds = 10;
+    const hashpassword = await bcrypt.hash(data.password,saltrounds)
+    data.password = hashpassword;
+    const userdata = await login.insertMany(data);
+    console.log(userdata);
+    res.render('signin')
+    }
+})
 
-        if (existingUser) {
-            // Username already exists, handle accordingly (e.g., send an error message)
-            return res.send("Username is already taken. Please choose a different username.");
+app.post('/signin',async(req,res)=>{
+        const check = await login.findOne({username:req.body.username});
+        if(!check){
+            res.render('signin',{message:"User name cannot found..."})
         }
-
-        // Username is unique, proceed with user creation
-        const userData = await login.create(data);
-        console.log(userData);
-        res.send("User successfully registered!");
-    } catch (error) {
-        // Handle other errors (e.g., database connection issues)
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
+        const match = await bcrypt.compare(req.body.password,check.password);
+        if(match){
+            res.redirect('/allbooks')
+        }else{
+            res.render('signin',{message:"Wrong password..."})
+        }
 })
 
 app.get('/allbooks',(req,res)=>{
     Book_db.find().sort({createdAt:-1})
     .then((result)=>{
-        console.log(result)
         res.render('index',{title:"All books",header:"All Books",book:result,show:""});
     })
     
@@ -96,7 +114,6 @@ app.get('/books',(req,res)=>{
     res.redirect('/allbooks')
 })
 app.post("/books",upload.single('pdf'), async(req,res)=>{
-    console.log(req)
     const book = new Book_db({
         title: req.body.title,
         author: req.body.author,
@@ -109,7 +126,7 @@ app.post("/books",upload.single('pdf'), async(req,res)=>{
         }
     });
     await book.save()
-            res.redirect('/');
+            res.redirect('/allbooks');
 })
 
 app.get('/books/:id',(req,res)=>{
@@ -139,7 +156,7 @@ app.get('/search', (req, res) => {
     const searchQuery = req.query.title;
     const heading = searchQuery
     if (!searchQuery) {
-      return res.redirect('/');
+      return res.redirect('/allbooks');
     }
   
     const searchRegex = new RegExp(searchQuery, 'i');
@@ -162,7 +179,7 @@ app.get('/search', (req, res) => {
   app.get('/genre', (req, res) => {
     const filter = req.query.genre ;
     if (!filter || filter === 'All') {
-      return res.redirect('/');
+      return res.redirect('/allbooks');
     }
   
     const filter_req = new RegExp(filter, 'i');

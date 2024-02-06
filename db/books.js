@@ -19,7 +19,7 @@ const bookschema = new schema({
         required:true
     },
     published:{
-        type:Date,
+        type:Number,
         required:true
     },
     pdf: {
