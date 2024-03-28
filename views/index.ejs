@@ -30,6 +30,16 @@
               <input class="form-control me-2" type="search" placeholder="Search using book name or author name" aria-label="Search" name="title">
               <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              <li class="nav-item">
+                <% if(user) { %>
+                  <a href="/logout" class="btn btn-outline-dark text-light logout-btn" type="submit">Log out</a>
+                  <% } else { %>
+                    <a href="/signin" class="btn btn-outline-dark text-light logout-btn" type="submit">SignIn</a>
+                    <a href="/signup" class="btn btn-outline-dark text-light logout-btn" type="submit">SignUp</a>
+                    <% } %>
+              </li>
+          </ul>
           </div>
         </div>
       </nav>

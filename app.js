@@ -1,11 +1,14 @@
 const express = require('express');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 const { result } = require('lodash');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
+const cookiesParser = require('cookie-parser')
+const { requireAuth,checkUser } = require('./middleware/auth')
 const app = express();
 const port = 8000;
 app.listen(port,()=>{
@@ -13,7 +16,7 @@ app.listen(port,()=>{
 });
 
 const Book_db = require('./db/books');
-const login = require('./db/user');
+const User = require('./db/user');
 const db = 'mongodb+srv://santhosh_18:santhosh1818@santhosh.q56f2et.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
     .then((result)=> console.log('connected to db'))
@@ -25,6 +28,7 @@ app.use(express.urlencoded({extended:true}));
 
 
 app.use(express.json())
+app.use(cookiesParser());
 app.use(express.urlencoded({extended:false}))
 
 const storage = multer.diskStorage({
@@ -46,20 +50,44 @@ const upload = multer({
         }
     }
 });
-app.use(session({
-    secret: 'santy',
-    resave: false,
-    saveUninitialized: false
-}));
-const isAuthenticated = (req, res, next) => {
-    if (req.session.loggedIn) { 
-        next();
-    } else {
-        res.redirect('/'); 
-    }
-};
 
-app.get('/',(req,res)=>{
+
+const handleErrors =(err)=>{
+    console.log(err.message,err.code)
+    let error = { name:'' , password:'' }
+
+    if(err.message == 'Incorrect Username'){
+        error.name = 'That Username is not registered'
+    }
+
+    if(err.message == 'Incorrect Password'){
+        error.password = 'That Password is incorrect'
+    }
+
+
+    if (err.code === 11000){
+        error.name = 'This username is already registered';
+        return error
+    }
+
+    if (err.message.includes('user validation failed')){
+    Object.values(err.errors).forEach(({properties}) =>{
+    error[properties.path] = properties.message;
+    });
+}
+    return error
+}
+
+const maxAge = 3*24*60*60;
+const createToken = (id) => {
+    return jwt.sign({id},'santy secret',{
+        expiresIn:maxAge
+    })
+}
+
+app.get('*',checkUser)
+
+app.get('/signin',(req,res)=>{
     res.render('signin',{message:""})
 })
 
@@ -67,39 +95,36 @@ app.get('/signup',(req,res)=>{
     res.render('signup',{message:""})
 })
 
-app.post('/signup',async(req,res)=>{
-    const data = {
-        username : req.body.username,
-        password : req.body.password
-    }
-    const existingUser = await login.findOne({username:data.username})
-    if(existingUser){
-        res.render('signup', { message: 'User already exists. Please choose a different username.' });
-    }
-    else{
-    const saltrounds = 10;
-    const hashpassword = await bcrypt.hash(data.password,saltrounds)
-    data.password = hashpassword;
-    const userdata = await login.insertMany(data);
-    console.log(userdata);
-    res.render('signin')
-    }
-})
-
 app.post('/signin',async(req,res)=>{
-        const check = await login.findOne({username:req.body.username});
-        if(!check){
-            res.render('signin',{message:"User name cannot found..."})
-        }
-        const match = await bcrypt.compare(req.body.password,check.password);
-        if(match){
-            res.redirect('/allbooks')
-        }else{
-            res.render('signin',{message:"Wrong password..."})
-        }
+    const { name , password } = req.body;
+    try{
+        const user = await User.login(name,password)
+        const token = createToken(user._id)
+        res.cookie('jwt',token,{httpOnly:true,maxAge:maxAge*1000})
+        res.status(200).json({user: user._id})
+    }
+    catch(err){
+        const errors = handleErrors(err)
+        res.status(400).json({errors})
+    }
+
 })
 
-app.get('/allbooks',(req,res)=>{
+app.post('/signup',async(req,res)=>{
+    const { name , password } = req.body;
+    try{
+        const user1 = await User.create({name,password})
+        const token = createToken(user1._id)
+        res.cookie('jwt',token,{httpOnly:true,maxAge:maxAge*1000})
+        res.status(201).json({user1:user1._id})
+    }
+    catch(err){
+        const errors = handleErrors(err)
+        res.status(400).json({ errors })
+    }
+})
+
+app.get('/',(req,res)=>{
     Book_db.find().sort({createdAt:-1})
     .then((result)=>{
         res.render('index',{title:"All books",header:"All Books",book:result,show:""});
@@ -107,7 +132,7 @@ app.get('/allbooks',(req,res)=>{
     
 })
 
-app.get('/create',(req,res)=>{
+app.get('/create',requireAuth,(req,res)=>{
     res.render('create',{title:'Add a Book'})
 })
 app.get('/books',(req,res)=>{
@@ -129,7 +154,7 @@ app.post("/books",upload.single('pdf'), async(req,res)=>{
             res.redirect('/allbooks');
 })
 
-app.get('/books/:id',(req,res)=>{
+app.get('/books/:id',requireAuth,(req,res)=>{
     const ids = req.params.id
     Book_db.findById(ids)
         .then((result)=>{
@@ -250,6 +275,9 @@ app.get('/books/pdf/:id', (req, res) => {
             res.status(404).render('404', { title: 'error' });
         });
 });
-
+app.get('/logout',(req,res)=>{
+        res.cookie('jwt','',{maxAge:1})
+        res.redirect('/')
+})
 
 app.use(morgan('dev'));

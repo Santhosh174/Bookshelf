@@ -66,3 +66,14 @@ footer{
     color: azure;
     padding: 50px 30px 80px 30px;
 }
+.logout-btn {
+    color: white;
+    font-weight: bold;
+    border: 2px solid white;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    color: black;
+    background-color: white;
+}
