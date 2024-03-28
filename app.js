@@ -136,7 +136,7 @@ app.get('/create',requireAuth,(req,res)=>{
     res.render('create',{title:'Add a Book'})
 })
 app.get('/books',(req,res)=>{
-    res.redirect('/allbooks')
+    res.redirect('/')
 })
 app.post("/books",upload.single('pdf'), async(req,res)=>{
     const book = new Book_db({
