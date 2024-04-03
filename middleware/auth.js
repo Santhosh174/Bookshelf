@@ -24,6 +24,8 @@ const requireAuth = (req,res,next) => {
 
 const checkUser = (req,res,next)=>{
     const token = req.cookies.jwt;
+    console.log('Hellos')
+    console.log(token)
     if(token){
         jwt.verify(token,'santy secret',async(err,decodedToken)=>{
             if(err){

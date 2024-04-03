@@ -45,6 +45,9 @@
       </nav>
     </div>
     <div class="her">
+      <% if(user) { %>
+      <h4>Welcome, <%- user.name %></h4>
+      <% } %>
         <h1>Explore Limitless Worlds of Imagination with Our Bookshelf</h1>
         <p style="margin-bottom:10vh;">Discover a curated collection of captivating stories and literary treasures that transport you to new realms of excitement and knowledge at our Bookshelf. Your next adventure awaits between the pages.</p>
         <div class="image">
@@ -56,18 +59,18 @@
         <div class="row">
             <div class="col-6">
                 <h3 class="mb-1"><%=header%></h3>
-                <form class="filterform" action="/genre" method="GET">
+                <form class="filterform" action="/genre?genre=<%= show %>" method="GET">
                 <select class="form-select" style="width: 50%;" aria-label="Default select example" name="genre" id="selete">
                   <option value="All"<%= show === 'All' ? 'selected' : '' %>>All</option>
                   <option value="Mystery" <%= show === 'Mystery' ? 'selected' : '' %>>Mystery</option>
                   <option value="Science Fiction" <%= show === 'Science Fiction' ? 'selected' : '' %>>Science Fiction</option>
-                  <option value="Love" <%= show === 'Love' ? 'selected' : '' %>>Love</option>
+                  <option value="Romance" <%= show === 'Romance' ? 'selected' : '' %>>Romance</option>
                   <option value="Fantasy" <%= show === 'Fantasy' ? 'selected' : '' %>>Fantasy</option>
                   <option value="Thriller" <%= show === 'Thriller' ? 'selected' : '' %>>Thriller</option>
                   <option value="Historical" <%= show === 'Historical' ? 'selected' : '' %>>Historical</option>
-                  <option value="Biography" <%= show === 'Biography' ? 'selected' : '' %>>Biography</option>
+                  <option value="Fiction" <%= show === 'Fiction' ? 'selected' : '' %>>Fiction</option>
                   <option value="Non-fiction" <%= show === 'Non-fiction' ? 'selected' : '' %>>Non-fiction</option>
-                  <option value="Horror" <%= show === 'Horror' ? 'selected' : '' %>>Horror</option>
+                  <option value="Classic" <%= show === 'Classic' ? 'selected' : '' %>>Classic</option>
                   <option value="Adventure" <%= show === 'Adventure' ? 'selected' : '' %>>Adventure</option>
                   <option value="Action" <%= show === 'Action' ? 'selected' : '' %>>Action</option>
                 </select>
@@ -91,7 +94,7 @@
                                 <% if(book.length>0) { %>
                                     <% book.forEach(books =>{ %>
                                         
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-4 mb-1">
                                     <a class="card mt-5"  href="/books/<%=books._id %>" style="text-decoration: none;" id="carda">
                                        
                                         <div class="card-body">
@@ -115,13 +118,56 @@
                     </div>
                 </div>
             </div>
-            
+            <div id="mystery" class="carousel-inner">
+          </div>
+          <div id="science fiction" class="carousel-inner">
+          </div>
+          <div id="romance" class="carousel-inner">
+          </div>
+          <div id="fantasy" class="carousel-inner">
+          </div>
+          <div id="thriller" class="carousel-inner">
+          </div>
+          <div id="historical" class="carousel-inner">
+          </div>
+          <div id="fiction" class="carousel-inner">
+          </div>
+          <div id="non-fiction" class="carousel-inner">
+          </div>
+          <div id="classic" class="carousel-inner">
+          </div>
+          <div id="adventure" class="carousel-inner">
+          </div>
+          <div id="action" class="carousel-inner">
+          </div>
 </section>
 <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
                 <div class="container text-center">
                   <small>Copyright &copy; techatsuki</small>
                 </div>
               </footer>
+
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Function to get URL parameters
+                    function getUrlParameter(name) {
+                        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                        var results = regex.exec(location.search);
+                        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+                    };
+                
+                    // Get the genre parameter from the URL
+                    var genre = getUrlParameter('genre');
+                
+                    // Scroll to the appropriate section based on the genre
+                    if (genre !== '') {
+                        var sectionId = genre.toLowerCase();
+                        document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+                </script>
+                
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -57,7 +57,6 @@
             <p class="genre"><span>Genre : </span><%-book.genre %></p>
             <p class="published"><span>Published Year : </span><span class="formatted-date" style="color: black;font-weight: 400;"><%- book.published %></span></p>
             <p class="description"><span>Descritpion : </span><%-book.description %></p>
-            <p class="pdf"><span>PDF : </span><a href="/books/pdf/<%- book._id %>" target="_blank">View Book PDF</a></p>
             <button class="edit" data-doc="<%- book._id %>">Edit</button>
             <button class="del" data-doc="<%- book._id %>">Delete</button>
 

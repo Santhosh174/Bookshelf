@@ -1,0 +1,60 @@
+ <!-- <div class="mb-3">
+            <label for="pdf" class="form-label">Upload PDF:</label>
+            <input type="file" class="form-control" id="pdf" name="pdf" accept=".pdf" required>
+        </div> -->
+
+    // },
+    // pdf: {
+    //     data: Buffer, 
+    //     contentType: String
+    // }
+    <!-- <p class="pdf"><span>PDF : </span><a href="/books/pdf/<%- book._id %>" target="_blank">View Book PDF</a></p> -->
+
+
+    // pdf: {
+        //     data: fs.readFileSync(req.file.path),
+        //     contentType: req.file.mimetype
+        // }
+
+
+// upload.single('pdf'),
+
+
+// const storage = multer.diskStorage({
+    //     destination: (req, file, cb) => {
+    //         cb(null, path.join(__dirname, 'uploads'));
+    //     },
+    //     filename: (req, file, cb) => {
+    //         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    //     }
+    // });
+    
+    // const upload = multer({
+    //     storage: storage,
+    //     fileFilter: (req, file, cb) => {
+    //         if (path.extname(file.originalname) === '.pdf') {
+    //             cb(null, true);
+    //         } else {
+    //             cb(new Error('Only PDF files are allowed'), false);
+    //         }
+    //     }
+    // });
+
+    // Update PDF if a new file is provided
+        // if (req.file && req.file.path) {
+        //     existingBook.pdf.data = fs.readFileSync(req.file.path);
+        //     existingBook.pdf.contentType = req.file.mimetype;
+        // }
+
+        // app.get('/books/pdf/:id', (req, res) => {
+            //     const id = req.params.id;
+            //     Book_db.findById(id)
+            //         .then((result) => {
+            //             res.contentType(result.pdf.contentType);
+            //             res.send(result.pdf.data);
+            //         })
+            //         .catch((err) => {
+            //             console.log(err);
+            //             res.status(404).render('404', { title: 'error' });
+            //         });
+            // });

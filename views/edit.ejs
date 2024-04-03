@@ -38,7 +38,7 @@
         </nav>
     </div>
 
-<form action="/books/edit/<%- book._id %>" class="formie" method="POST" enctype="multipart/form-data">
+<form action="/books/edit/<%- book._id %>" class="formie" method="POST" >
     <div class="head-1">
         <h1>Edit a Book "<%-book.title%>"</h1>
     </div>
@@ -63,10 +63,6 @@
             <label for="description" class="form-label">Description : </label>
             <textarea class="form-control" id="description" name="description"  rows="5" required><%-book.description %></textarea>
           </div>
-          <div class="mb-3">
-            <label for="pdf" class="form-label">Upload PDF:</label>
-            <input type="file" class="form-control" id="pdf" name="pdf" accept=".pdf" value="<%-book.pdf %>" >
-        </div>
           <input type="button" id="resetBtn" value ="Reset">
             <input id="sub" type="submit" value="Save Changes">
        

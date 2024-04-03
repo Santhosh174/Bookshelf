@@ -18,7 +18,7 @@ app.listen(port,()=>{
 const Book_db = require('./db/books');
 const User = require('./db/user');
 const db = 'mongodb+srv://santhosh_18:santhosh1818@santhosh.q56f2et.mongodb.net/?retryWrites=true&w=majority';
-mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
+mongoose.connect(db)
     .then((result)=> console.log('connected to db'))
     .catch((err)=> console.log(err));
 const morgan = require('morgan');
@@ -29,27 +29,7 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(express.json())
 app.use(cookiesParser());
-app.use(express.urlencoded({extended:false}))
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'uploads'));
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
-
-const upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        if (path.extname(file.originalname) === '.pdf') {
-            cb(null, true);
-        } else {
-            cb(new Error('Only PDF files are allowed'), false);
-        }
-    }
-});
 
 
 const handleErrors =(err)=>{
@@ -127,6 +107,7 @@ app.post('/signup',async(req,res)=>{
 app.get('/',(req,res)=>{
     Book_db.find().sort({createdAt:-1})
     .then((result)=>{
+        console.log('Book Fetched')
         res.render('index',{title:"All books",header:"All Books",book:result,show:""});
     })
     
@@ -138,20 +119,22 @@ app.get('/create',requireAuth,(req,res)=>{
 app.get('/books',(req,res)=>{
     res.redirect('/')
 })
-app.post("/books",upload.single('pdf'), async(req,res)=>{
+app.post("/books", async(req,res)=>{
+    console.log(req.body);
+    try{
     const book = new Book_db({
         title: req.body.title,
         author: req.body.author,
         description: req.body.description,
         genre: req.body.genre,
-        published: req.body.published,
-        pdf: {
-            data: fs.readFileSync(req.file.path),
-            contentType: req.file.mimetype
-        }
+        published: req.body.published
     });
     await book.save()
-            res.redirect('/allbooks');
+            res.redirect('/');
+    }
+    catch(err){
+        console.log(err)
+    }
 })
 
 app.get('/books/:id',requireAuth,(req,res)=>{
@@ -181,7 +164,7 @@ app.get('/search', (req, res) => {
     const searchQuery = req.query.title;
     const heading = searchQuery
     if (!searchQuery) {
-      return res.redirect('/allbooks');
+      return res.redirect('/');
     }
   
     const searchRegex = new RegExp(searchQuery, 'i');
@@ -204,7 +187,7 @@ app.get('/search', (req, res) => {
   app.get('/genre', (req, res) => {
     const filter = req.query.genre ;
     if (!filter || filter === 'All') {
-      return res.redirect('/allbooks');
+      return res.redirect('/');
     }
   
     const filter_req = new RegExp(filter, 'i');
@@ -231,7 +214,7 @@ app.get('/search', (req, res) => {
         });
 });
 
-app.post('/books/edit/:id', upload.single('pdf'), async(req, res) => {
+app.post('/books/edit/:id', async(req, res) => {
     const id = req.params.id;
 
     try {
@@ -248,11 +231,7 @@ app.post('/books/edit/:id', upload.single('pdf'), async(req, res) => {
         existingBook.genre = req.body.genre;
         existingBook.published = req.body.published;
 
-        // Update PDF if a new file is provided
-        if (req.file && req.file.path) {
-            existingBook.pdf.data = fs.readFileSync(req.file.path);
-            existingBook.pdf.contentType = req.file.mimetype;
-        }
+        
 
         // Save the updated book
         await existingBook.save();
@@ -263,18 +242,7 @@ app.post('/books/edit/:id', upload.single('pdf'), async(req, res) => {
     }
 });
 
-app.get('/books/pdf/:id', (req, res) => {
-    const id = req.params.id;
-    Book_db.findById(id)
-        .then((result) => {
-            res.contentType(result.pdf.contentType);
-            res.send(result.pdf.data);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(404).render('404', { title: 'error' });
-        });
-});
+
 app.get('/logout',(req,res)=>{
         res.cookie('jwt','',{maxAge:1})
         res.redirect('/')

@@ -36,7 +36,7 @@
         </div>
       </nav>
     </div>
-    <form action="/books" class="formie" method="POST" enctype="multipart/form-data">
+    <form action="/books" class="formie" method="POST">
         <div class="head-1">
             <h1>ADD BOOKS</h1>
         </div>
@@ -50,8 +50,8 @@
             <input type="text" class="form-control" id="author" name="author" placeholder="Author name" required>
           </div>
           <div class="mb-3">
-            <label for="author" class="form-label">Genre : </label>
-            <input type="text" class="form-control" id="author" name="genre" placeholder="Type of genre" required>
+            <label for="genre" class="form-label">Genre : </label>
+            <input type="text" class="form-control" id="genre" name="genre" placeholder="Type of genre" required>
           </div>
           <div class="mb-3">
             <label for="publishedDate" class="form-label">Published Year : </label>
@@ -61,10 +61,7 @@
             <label for="description" class="form-label">Description : </label>
             <textarea class="form-control" id="description" name="description" placeholder="Description of the book" rows="5" required></textarea>
           </div>
-          <div class="mb-3">
-            <label for="pdf" class="form-label">Upload PDF:</label>
-            <input type="file" class="form-control" id="pdf" name="pdf" accept=".pdf" required>
-        </div>
+         
             <input id="subb" type="submit" value="Add">
            
         </div>
